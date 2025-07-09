@@ -1,12 +1,19 @@
 import dotenv from "dotenv";
 import express from "express";
 import axios from "axios";
+import path from "path";
+import { fileURLToPath } from "url";
 import ElasticClient from "./config/elastic.js";
 
 dotenv.config();
 
 const app = express();
 app.use(express.json());
+
+// Serve static files from the public directory
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+app.use(express.static(path.join(__dirname, "../public")));
 
 // === GET EMBEDDING FROM AZURE OPENAI ===
 const getEmbedding = async (text) => {
