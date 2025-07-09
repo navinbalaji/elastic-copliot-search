@@ -1,12 +1,12 @@
 {
   "name": "copliot-search",
   "version": "1.0.0",
-  "description": "",
+  "description": "A search application powered by Elasticsearch.",
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start":"./src/server.js",
-    "seed":"./src/seed.js"
+    "start":"node ./src/server.js",
+    "seed":"node ./src/seed.js"
   },
   "keywords": [],
   "author": "",
