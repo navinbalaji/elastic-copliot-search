@@ -1,0 +1,21 @@
+{
+  "name": "copliot-search",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start":"./src/server.js",
+    "seed":"./src/seed.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.5.1",
+  "dependencies": {
+    "@elastic/elasticsearch": "^9.0.3",
+    "axios": "^1.10.0",
+    "dotenv": "^17.1.0",
+    "express": "^5.1.0"
+  }
+}

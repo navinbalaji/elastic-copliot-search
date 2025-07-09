@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>🎥 Semantic Movie Search</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 2rem;
+      max-width: 800px;
+      margin: auto;
+      background-color: #f9f9f9;
+    }
+
+    h1 {
+      color: #333;
+    }
+
+    input[type="text"] {
+      width: 70%;
+      padding: 10px;
+      font-size: 16px;
+      margin-right: 10px;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .results {
+      margin-top: 2rem;
+    }
+
+    .movie-card {
+      background: #fff;
+      border-radius: 8px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .movie-card h3 {
+      margin-top: 0;
+    }
+
+    .loading {
+      color: green;
+    }
+
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🎥 Semantic Movie Search</h1>
+  <p>Type a description or mood like: "space exploration", "thriller like Inception", or "romantic comedy"</p>
+
+  <div>
+    <input type="text" id="searchInput" placeholder="Search for movies..." />
+    <button onclick="performSearch()">Search</button>
+  </div>
+
+  <div class="results" id="results"></div>
+
+  <script>
+    async function performSearch() {
+      const query = document.getElementById('searchInput').value.trim();
+      const resultsDiv = document.getElementById('results');
+      resultsDiv.innerHTML = '';
+
+      if (!query) {
+        resultsDiv.innerHTML = '<p class="error">Please enter a search query.</p>';
+        return;
+      }
+
+      // Show loading
+      resultsDiv.innerHTML = '<p class="loading">Searching...</p>';
+
+      try {
+        const response = await fetch('http://localhost:8000/search', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ query })
+        });
+
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+
+        const data = await response.json();
+
+        if (data.length === 0) {
+          resultsDiv.innerHTML = '<p>No results found.</p>';
+          return;
+        }
+
+        let html = '';
+        data.forEach(movie => {
+          html += `
+            <div class="movie-card">
+              <h3>${escapeHtml(movie.title)}</h3>
+              <p><strong>Overview:</strong> ${escapeHtml(movie.overview || 'N/A')}</p>
+              <p><strong>Rating:</strong> ⭐ ${movie.vote_average || 'N/A'} (${movie.vote_count || 0} votes)</p>
+              <p><strong>Release Date:</strong> ${movie.release_date || 'Unknown'}</p>
+            </div>
+          `;
+        });
+
+        resultsDiv.innerHTML = html;
+
+      } catch (error) {
+        console.error('Error:', error);
+        resultsDiv.innerHTML = `<p class="error">Error fetching results: ${error.message}</p>`;
+      }
+    }
+
+    // Helper to escape HTML characters
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+  </script>
+
+</body>
+</html>
