@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import fs from "fs";
 import path from "path";
 import axios from "axios";
-import ElasticClient from "./config/elastic";
+import ElasticClient from "./config/elastic.js";
 
 dotenv.config();
 

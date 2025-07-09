@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 import express from "express";
 import axios from "axios";
-import ElasticClient from "./config/elastic";
+import ElasticClient from "./config/elastic.js";
 
 dotenv.config();
 
