@@ -15,7 +15,6 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 app.use(express.static(path.join(__dirname, "../public")));
 
-// === GET EMBEDDING FROM AZURE OPENAI ===
 const getEmbedding = async (text) => {
   try {
     const response = await axios.post(
@@ -33,17 +32,15 @@ const getEmbedding = async (text) => {
 
     return response.data.data[0].embedding;
   } catch (err) {
-    console.error("🚨 Embedding generation failed:", err.message);
+    console.error("Embedding generation failed:", err.message);
     throw new Error("Failed to generate embedding");
   }
 };
 
-// === INDEX A MOVIE INTO ELASTICSEARCH ===
 app.post("/index-movie", async (req, res) => {
   try {
     const movie = req.body;
 
-    // Combine title + overview for better semantic context
     const combinedText = `${movie.title} ${movie.overview}`;
     const embedding = await getEmbedding(combinedText);
 
@@ -57,14 +54,13 @@ app.post("/index-movie", async (req, res) => {
       },
     });
 
-    res.json({ success: true, message: `✅ Movie "${movie.title}" indexed successfully` });
+    res.json({ success: true, message: `Movie "${movie.title}" indexed successfully` });
   } catch (err) {
-    console.error("❌ Failed to index movie:", err.message);
+    console.error("Failed to index movie:", err.message);
     res.status(500).json({ error: "Failed to index movie" });
   }
 });
 
-// === SEMANTIC SEARCH ENDPOINT ===
 app.post("/search", async (req, res) => {
   try {
     const userQuery = req.body.query;
@@ -89,12 +85,11 @@ app.post("/search", async (req, res) => {
 
     res.json(result.hits.hits.map((hit) => hit._source));
   } catch (err) {
-    console.error("❌ Search failed:", err.message);
+    console.error("Search failed:", err.message);
     res.status(500).json({ error: "Search failed" });
   }
 });
 
-// === SEMANTIC SEARCH ENDPOINT ===
 app.get("/search", async (req, res) => {
   try {
     const userQuery = req.query.query;
@@ -108,7 +103,7 @@ app.get("/search", async (req, res) => {
     const result = await ElasticClient.search({
       index: process.env.ELASTIC_INDEX_NAME,
       body: {
-        _source: ["title", "overview", "vote_average", "release_date"], // ← Only these fields
+        _source: ["title", "overview", "vote_average", "release_date"], 
         knn: {
           field: "embedding",
           query_vector: embedding,
@@ -120,17 +115,15 @@ app.get("/search", async (req, res) => {
 
     res.json(result.hits.hits.map((hit) => hit._source));
   } catch (err) {
-    console.error("❌ Search failed:", err.message);
+    console.error("Search failed:", err.message);
     res.status(500).json({ error: "Search failed" });
   }
 });
 
-// === HEALTH CHECK ===
 app.get("/health", (req, res) => {
   res.json({ status: "healthy", timestamp: new Date() });
 });
 
-// === START SERVER ===
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
   console.log(`🚀 Server running on http://localhost:${PORT}`);

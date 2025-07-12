@@ -40,7 +40,6 @@ const seedMovies = async () => {
   for (let i = 0; i < movies.length; i++) {
     const movie = movies[i];
 
-    // Combine title + overview for better context
     const combinedText = `${movie.title} ${movie.overview}`;
     const embedding = await getEmbedding(combinedText);
 
