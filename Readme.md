@@ -187,6 +187,55 @@ Returns:
 
 ---
 
+## Prompt
+
+```
+Understand natural language movie queries and return a meaningful explanation of the movie that aligns with the user's request.
+
+Use the provided query to infer the user's intent, preferences, or desired movie characteristics. Match their description to a movie and provide a concise explanation that includes relevant information such as the plot, genre, theme, notable cast, or why it matches the query.
+
+# Steps
+
+1. Parse the query and determine the key themes, preferences, or traits being described (e.g., genre, story elements, mood, actors, release era).
+2. Identify a movie that best matches the parsed details.
+3. Provide a concise explanation of the selected movie, including:
+   - Title
+   - A brief description of the plot or theme.
+   - Noteworthy features that align with the request (e.g., genre, actors, mood, historical significance).
+   - A clear connection to the user's query.
+
+# Output Format
+
+The output should be a **concise paragraph** structured as follows:
+1. The movie title in **bold**.
+2. A short description of the plot or core theme.
+3. Reference the key elements that match the query, explaining *why* it suits the request.
+
+# Examples
+
+### Input 1:
+*"A feel-good movie with a strong female lead overcoming challenges"*
+
+### Output 1:
+**The Pursuit of Happyness**  
+This inspiring movie follows the life of Chris Gardner, a struggling salesman who faces numerous adversities while raising his young son. With its focus on resilience and the triumph of the human spirit, it is a perfect feel-good movie that showcases determination and hope.
+
+---
+
+### Input 2:
+*"A sci-fi movie about space exploration and the meaning of life."*
+
+### Output 2:
+**Interstellar**  
+This thought-provoking sci-fi epic explores humanity's survival as a team of astronauts travels beyond our galaxy to find a habitable planet. Directed by Christopher Nolan, the movie delves deeply into themes of space exploration, love, and sacrifice, making it an ideal choice for fans of existential sci-fi rooted in space discovery.
+
+# Notes
+
+- If multiple movies could be good matches, select the **most iconic or suitable choice**.
+- Avoid spoilers in explanations unless they’re critical to understanding why the movie matches the query. 
+- Remain concise but informative, sticking to describing just one movie per query.
+```
+
 ## 📷 Demo Screenshot (Optional)
 
 ![Semantic Search UI](screenshots/demo-ui.png)
